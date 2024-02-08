@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qual é a música, Carol?</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #85e085; /* Cor de fundo verde */
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 50px auto;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+        color: #0d5f0d; /* Cor do título */
+    }
+
+    .game-container {
+        background-color: #d9f7d9; /* Cor de fundo do contêiner */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .song-info {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #0d5f0d; /* Cor do texto */
+    }
+
+    .guess-input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+        border: 2px solid #0d5f0d; /* Cor da borda */
+        border-radius: 5px;
+    }
+
+    .check-btn {
+        background-color: #0d5f0d; /* Cor do botão */
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .check-btn:hover {
+        background-color: #084a08; /* Cor do botão ao passar o mouse */
+    }
+
+    .result {
+        font-weight: bold;
+        color: #0d5f0d; /* Cor do texto do resultado */
+    }
+
+    .next-btn {
+        background-color: #0d5f0d; /* Cor do botão próximo */
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .next-btn:hover {
+        background-color: #084a08; /* Cor do botão próximo ao passar o mouse */
+    }
+
+    /* Estilo do player de vídeo */
+    video {
+        background-color: #85e085; /* Cor do fundo do player */
+        border-radius: 5px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Qual é a música, Carol?</h1>
+    <div class="game-container">
+        <video controls id="video" width="100%" height="auto">
+            <source src= "file:///C:/Users/Pichau/Desktop/musica/1.mp4" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+        </video>
+        <div class="song-info" id="song-info">Nome da Música</div>
+        <input type="text" class="guess-input" id="guess-input" placeholder="Digite a resposta e pressione Enter">
+        <button class="check-btn" id="check-btn">Verificar</button>
+        <p class="result" id="result"></p>
+        <button class="next-btn" id="next-btn" style="display: none;">Próxima Música</button>
+    </div>
+</div>
+
+<script>
+    const songs = [
+        { name: "Música 1", src: "file:///C:/Users/Pichau/Desktop/musica/1.mp4", answer: "lonely" },
+        { name: "Música 2", src: "file:///C:/Users/Pichau/Desktop/musica/2.mp4", answer: "is this Love" },
+        { name: "Música 3", src: "file:///C:/Users/Pichau/Desktop/musica/3.mp4", answer: "andar com fé" },
+        { name: "Música 4", src: "file:///C:/Users/Pichau/Desktop/musica/4.mp4", answer: "levanta e anda" },
+        { name: "Música 5", src: "file:///C:/Users/Pichau/Desktop/musica/5.mp4", answer: "hoje sou eu quem não mais te quero" },
+        { name: "Música 6", src: "file:///C:/Users/Pichau/Desktop/musica/6.mp4", answer: "work" },
+        { name: "Música 7", src: "file:///C:/Users/Pichau/Desktop/musica/7.mp4", answer: "golden hour" },
+        { name: "Música 8", src: "file:///C:/Users/Pichau/Desktop/musica/8.mp4", answer: "dona cila" },
+        { name: "Música 9", src: "file:///C:/Users/Pichau/Desktop/musica/9.mp4", answer: "astronauta de mármore" },
+        { name: "Música 10", src: "file:///C:/Users/Pichau/Desktop/musica/10.mp4", answer: "cafuné" }
+    ];
+
+    const video = document.getElementById("video");
+    const songInfo = document.getElementById("song-info");
+    const guessInput = document.getElementById("guess-input");
+    const checkBtn = document.getElementById("check-btn");
+    const result = document.getElementById("result");
+    const nextBtn = document.getElementById("next-btn");
+
+    let currentSongIndex = 0;
+    let correctAnswers = 0;
+
+    function loadSong() {
+        video.src = songs[currentSongIndex].src;
+        songInfo.textContent = songs[currentSongIndex].name;
+    }
+
+    function checkAnswer() {
+        const userGuess = guessInput.value.trim();
+        const correctAnswer = songs[currentSongIndex].answer;
+
+        if (userGuess.toLowerCase() === correctAnswer.toLowerCase()) {
+            result.textContent = "Correto!";
+            correctAnswers++;
+            if (correctAnswers === 10) {
+                nextBtn.textContent = "Finalizar";
+            }
+            nextBtn.style.display = "block";
+        } else {
+            result.textContent = "Incorreto. Tente novamente.";
+        }
+    }
+
+    function nextSong() {
+        currentSongIndex++;
+        if (currentSongIndex < songs.length) {
+            loadSong();
+            guessInput.value = "";
+            result.textContent = "";
+            nextBtn.style.display = "none";
+        } else {
+            alert("Parabéns! Você completou o jogo.");
+        }
+    }
+
+    loadSong();
+
+    checkBtn.addEventListener("click", checkAnswer);
+    nextBtn.addEventListener("click", nextSong);
+
+    // Adicionando a funcionalidade de pressionar Enter para verificar a resposta
+    guessInput.addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault(); // Evita que o formulário seja enviado
+            checkAnswer();
+        }
+    });
+</script>
+</body>
+</html>
